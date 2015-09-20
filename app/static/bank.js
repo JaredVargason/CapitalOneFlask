@@ -1,4 +1,4 @@
-function initialize() {
+/*function initialize() {
 	var data = [{
     "title": "Stockholm",
     "lat": 59.3,
@@ -44,4 +44,68 @@ function initialize() {
 
 console.log("happened");
 google.maps.event.addDomListener(window, 'load', initialize);
-console.log("done");
+console.log("done");*/
+
+function initialize() {
+    var mapCanvas = document.getElementById('map');
+
+    var mapOptions = {
+    center: new google.maps.LatLng(44.5403, -78.5463),
+    zoom: 2,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+    map = new google.maps.Map(mapCanvas, mapOptions);
+    var myLatLng = {lat: 45.363, lng: -72.044};
+    var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
+  })
+
+    myLatLng = {lat: 36.363, lng: -35.044}
+    var marker2 = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
+  });
+
+  yes();
+};
+
+var map = null;
+var markers = [];
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+function yes() {
+  //Send the AJAX call to the server
+  $.ajax({
+  //The URL to process the request
+    'url' : 'http://localhost:5000/get_branches',
+  //The type of request, also known as the "method" in HTML forms
+  //Can be 'GET' or 'POST'
+    'type' : 'GET',
+    'datatype' : 'text/xml',
+  //The response from the server
+    'success' : function(data) {
+    //You can use any jQuery/JavaScript here!!!
+      swag = JSON.parse(data);
+
+      swag.forEach(function(o) {
+        
+                 /*if (typeof data.geocode === undefined || typeof data.geocode.lat === undefined || typeof data.gecode.lng === undefined) {
+            return;}*/
+
+            if (o.geocode.lat && o.geocode.lng) {
+
+              markers.push(new google.maps.Marker({
+                position: {lat: o.geocode.lat, lng: o.geocode.lng},
+                map: map,
+                title: o._id
+              }))}
+
+      });
+    }
+  });
+}
