@@ -56,21 +56,8 @@ function initialize() {
   };
 
     map = new google.maps.Map(mapCanvas, mapOptions);
-    var myLatLng = {lat: 45.363, lng: -72.044};
-    var marker = new google.maps.Marker({
-    position: myLatLng,
-    map: map,
-    title: 'Hello World!'
-  })
 
-    myLatLng = {lat: 36.363, lng: -35.044}
-    var marker2 = new google.maps.Marker({
-    position: myLatLng,
-    map: map,
-    title: 'Hello World!'
-  });
-
-  yes();
+    yes();
 };
 
 var map = null;
