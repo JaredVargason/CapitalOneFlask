@@ -31,21 +31,24 @@ function yes() {
     'data' : payload,
     'datatype' : 'application/json',
   //The response from the server
-    'success' : function(data) {
+    'success' : function(data) {console.log(data);
     //You can use any jQuery/JavaScript here!!!
+      if (data.length <= 0) {
+          console.log("false");
+          return false;
+      }
       swag = JSON.parse(data);
-
       swag.forEach(function(o) {
         
             contentString='<h1>' + o.name + '</h1>'
 
-            if (o.geocode.lat && o.geocode.lng) {
+            if (o.lat && o.lng) {
                 var infowindow = new google.maps.InfoWindow({
                content: contentString
                 });
 
                 marker = new google.maps.Marker({
-                position: {lat: o.geocode.lat, lng: o.geocode.lng},
+                position: {lat: o.lat, lng: o.lng},
                 map: map,
                 title: o._id
               })

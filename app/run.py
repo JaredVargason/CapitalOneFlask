@@ -16,7 +16,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
 
-@app.route('/', methods=['GET'])
+@app.route('/customers', methods=['GET'])
 def index():
 	return render_template('customers.html')
 
@@ -35,16 +35,21 @@ def get_user_purchase_info():
 	account_id = request.form['account_id']
 	print account_id
 	Purchase = db.Purchase
-	cursor = Purchase.find({'payer_id':str(account_id)})
-	print str(cursor.count())
-	for item in cursor:
-		print item
-		doc = Purchase.find_one({'merchant_id' : item['merchant_id']})
-		item['geocode']['lat'] = doc['geocode']['lat']
-		item['geocode']['lng'] = doc['geocode']['lng']
-		item['name'] = doc['name']
+	a = list(Purchase.find({'payer_id':str(account_id)}))
+	for item in a:
+		doc = db.Merchant.find_one({'_id' : item['merchant_id']})
+		#print type(doc['geocode'])
+		if doc != None and 'geocode' in doc:
+			print  doc['geocode']
+			lat = doc['geocode']['lat']
+			lng = doc['geocode']['lng']
+			item['lat'] = lat
+			item['lng'] = lng
+			item['name'] = doc['name']
 
-	return dumps(cursor)
+	
+	print a
+	return dumps(a)
 
 @app.route('/get_branches', methods=['GET'])
 def get_branches():
